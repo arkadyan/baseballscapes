@@ -43,6 +43,10 @@ class MLBGameData
 
   attr_reader :date, :team, :index
 
+  def cache?
+    !ENV['RACK_ENV'].present? || ENV['RACK_ENV'] != 'production'
+  end
+
   # TODO: support double headers
   def initialize date, team, index=0
     @date = Date.parse date
@@ -62,8 +66,8 @@ class MLBGameData
     remote_data = open(compute_url + file).read
     file_path = compute_url.split('/').last + file.gsub('/', '-')
 
-
-    open(File.join(CACHE_PATH)+'/'+file_path, 'wb') do |file|
+    if cache?
+      open(File.join(CACHE_PATH)+'/'+file_path, 'wb') do |file|
         begin
           puts "--- writing #{File.join(CACHE_PATH)+file_path}"
           file << remote_data
@@ -71,15 +75,18 @@ class MLBGameData
           puts "ERROR: #{compute_url}"
         end
       end
-     Nokogiri::XML remote_data
+    end
+    Nokogiri::XML remote_data
   end
 
   def prefetched_data file
-    regex = /#{date.to_s.gsub(/-/,'_')}.*_#{team}mlb_.*#{file.sub(/\//, '-')}/
-    Dir.foreach(File.join(CACHE_PATH)) do |f|
-      if f.match regex
-        puts "--- cache hit #{f}"
-        return Nokogiri::XML(open([File.join(CACHE_PATH), f].join('/')))
+    if cache?
+      regex = /#{date.to_s.gsub(/-/,'_')}.*_#{team}mlb_.*#{file.sub(/\//, '-')}/
+      Dir.foreach(File.join(CACHE_PATH)) do |f|
+        if f.match regex
+          puts "--- cache hit #{f}"
+          return Nokogiri::XML(open([File.join(CACHE_PATH), f].join('/')))
+        end
       end
     end
     puts "--- cache miss #{date} / #{team} / #{file}"
