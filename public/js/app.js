@@ -69,23 +69,20 @@ $(function() {
   pointLight.position.y = 50;
   pointLight.position.z = 130;
 
-
-
-
-  function animate() {
-    requestAnimationFrame(animate);
-
-    // Add all elements to the scene
-    for (var i=0; i < pitches.length; i++) {
-      pitches[i].add(scene);
-    }
-    InningSphere.draw();
-
-    // Add the light to the scene
-    scene.add(pointLight);
-
-    renderer.render(scene, camera);
+  for (var i=0; i < pitches.length; i++) {
+    pitches[i].add(scene);
   }
-  animate();
+  InningSphere.draw();
 
+  // Add the light to the scene
+  scene.add(pointLight);
+
+  renderer.render(scene, camera);
 });
+
+
+// util
+function rand(max) {
+  return Math.random()*max;
+}
+
