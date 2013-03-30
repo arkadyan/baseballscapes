@@ -2,5 +2,5 @@ require 'compass'
 require 'sinatra'
 
 get '/' do
-  "Baseballscapes!"
+  erb :index
 end
