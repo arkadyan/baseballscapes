@@ -7,7 +7,7 @@ $(function() {
 
   // GUI controls
   var gui = new dat.GUI();
-  gui.add(pitch, 'size');
+  gui.add(pitch, 'size', 5, 100);
 
 
   // Set the scene size
