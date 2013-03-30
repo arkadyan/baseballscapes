@@ -101,6 +101,7 @@ $(function() {
 
   // very sorry
   renderer.render(scene, camera);
+  setTimeout(function(){renderer.render(scene, camera);}, 1000);
 });
 
 
