@@ -2,42 +2,43 @@ require 'date'
 require 'open-uri'
 require 'nokogiri'
 require "active_support/core_ext"
+# require 'pry'
 
 class MLBGameData
   BASE_URL = 'http://gd2.mlb.com/components/game/mlb'
   DATA_VERSION = '001'
   CACHE_PATH = File.join(File.dirname(__FILE__), '..', 'data_cache', DATA_VERSION)
   TEAMS    = {
-    ari: "Arizona Diamondbacks",
-    atl: "Atlanta Braves",
-    bal: "Baltimore Orioles",
-    bos: "Boston Red Sox",
-    chn: "Chicago Cubs",
-    cha: "Chicago White Sox",
-    cin: "Cincinnati Reds",
-    cle: "Cleveland Indians",
-    col: "Colorado Rockies",
-    det: "Detroit Tigers",
-    hou: "Houston Astros",
-    kca: "Kansas City Royals",
-    ana: "Los Angeles Angels",
-    lan: "Los Angeles Dodgers",
-    flo: "Miami Marlins",
-    mil: "Milwaukee Brewers",
-    min: "Minnesota Twins",
-    nyn: "New York Mets",
-    nya: "New York Yankees",
-    oak: "Oakland Athletics",
-    phi: "Philadelphia Phillies",
-    pit: "Pittsburgh Pirates",
-    sdn: "San Diego Padres",
-    sfn: "San Francisco Giants",
-    sea: "Seattle Mariners",
-    sln: "St. Louis Cardinals",
-    tba: "Tampa Bay Rays",
-    tex: "Texas Rangers",
-    tor: "Toronto Blue Jays",
-    was: "Washington Nationals"
+    ari: {name: "Arizona Diamondbacks",  color: '#FFEFD5'},
+    atl: {name: "Atlanta Braves",        color: '#FFDAB9'},
+    bal: {name: "Baltimore Orioles",     color: '#CD853F'},
+    bos: {name: "Boston Red Sox",        color: '#FFC0CB'},
+    chn: {name: "Chicago Cubs",          color: '#DDA0DD'},
+    cha: {name: "Chicago White Sox",     color: '#B0E0E6'},
+    cin: {name: "Cincinnati Reds",       color: '#800080'},
+    cle: {name: "Cleveland Indians",     color: '#FF0000'},
+    col: {name: "Colorado Rockies",      color: '#BC8F8F'},
+    det: {name: "Detroit Tigers",        color: '#4169E1'},
+    hou: {name: "Houston Astros",        color: '#8B4513'},
+    kca: {name: "Kansas City Royals",    color: '#FA8072'},
+    ana: {name: "Los Angeles Angels",    color: '#F4A460'},
+    lan: {name: "Los Angeles Dodgers",   color: '#2E8B57'},
+    flo: {name: "Miami Marlins",         color: '#FFF5EE'},
+    mil: {name: "Milwaukee Brewers",     color: '#A0522D'},
+    min: {name: "Minnesota Twins",       color: '#C0C0C0'},
+    nyn: {name: "New York Mets",         color: '#87CEEB'},
+    nya: {name: "New York Yankees",      color: '#6A5ACD'},
+    oak: {name: "Oakland Athletics",     color: '#708090'},
+    phi: {name: "Philadelphia Phillies", color: '#00FF7F'},
+    pit: {name: "Pittsburgh Pirates",    color: '#4682B4'},
+    sdn: {name: "San Diego Padres",      color: '#D2B48C'},
+    sfn: {name: "San Francisco Giants",  color: '#008080'},
+    sea: {name: "Seattle Mariners",      color: '#D8BFD8'},
+    sln: {name: "St. Louis Cardinals",   color: '#FF6347'},
+    tba: {name: "Tampa Bay Rays",        color: '#40E0D0'},
+    tex: {name: "Texas Rangers",         color: '#EE82EE'},
+    tor: {name: "Toronto Blue Jays",     color: '#F5DEB3'},
+    was: {name: "Washington Nationals",  color: '#FFFF00'}
   }
 
   attr_reader :date, :team, :index
@@ -56,8 +57,16 @@ class MLBGameData
   #useful files
   # /inning/inning_all.xml - a large file containing every pitch, etc
 
-  def data file = 'inning/inning_all.xml'
-    @_data ||= (prefetched_data(file) || fetch_file(file))
+  def data file
+    prefetched_data(file) || fetch_file(file)
+  end
+
+  def box_score
+    @_box_score ||= data('boxscore.json')['data']['boxscore']
+  end
+
+  def innings_all
+    @_innings_all ||= data('inning/inning_all.xml')
   end
 
   def fetch_file file
@@ -75,7 +84,17 @@ class MLBGameData
         end
       end
     end
-    Nokogiri::XML remote_data
+    outfile(remote_data, file)
+  end
+
+  def outfile remote_data, file_name
+    if file_name.match(/\.xml/)
+      Nokogiri::XML remote_data
+    elsif file_name.match(/\.json/)
+      JSON.parse remote_data
+    else
+      remote_data
+    end
   end
 
   def prefetched_data file
@@ -84,7 +103,7 @@ class MLBGameData
       Dir.foreach(File.join(CACHE_PATH)) do |f|
         if f.match regex
           puts "--- cache hit #{f}"
-          return Nokogiri::XML(open([File.join(CACHE_PATH), f].join('/')))
+          return outfile(open([File.join(CACHE_PATH), f].join('/')).read, file)
         end
       end
     end
@@ -92,8 +111,16 @@ class MLBGameData
     nil
   end
 
+  def home_team
+    MLBGameData::TEAMS[innings.first.home_team.to_sym]
+  end
+
+  def away_team
+    MLBGameData::TEAMS[innings.first.away_team.to_sym]
+  end
+
   def innings
-    @_innings ||= data.search('inning').map{|i| Inning.new(i)}
+    @_innings ||= innings_all.search('inning').map{|i| Inning.new(i)}
   end
 
   def at_bats
@@ -167,5 +194,5 @@ end
 
 # params = {:date => '2012-07-13', :team => 'lan'}
 # d = MLBGameData.new(params[:date], params[:team])
-# a = d.at_bats.last
+# a = d.box_score
 # binding.pry
