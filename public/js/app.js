@@ -1,6 +1,6 @@
 /*global window, $, THREE, data, Pitch, requestAnimationFrame, dat */
 
-var scene, renderer, camera;
+var scene, renderer, camera, WIDTH, HEIGHT;
 
 $(function() {
   var i, j, k;
@@ -33,8 +33,8 @@ $(function() {
 
 
   // Set the scene size
-  var WIDTH = window.innerWidth,
-      HEIGHT = window.innerHeight;
+  WIDTH = window.innerWidth;
+  HEIGHT = window.innerHeight;
 
   // Set some camera attributes
   var VIEW_ANGLE = 45,
