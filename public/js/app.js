@@ -15,7 +15,8 @@ $(function() {
       for (var k=0; k < atBat.pitches.length; k++) {
         var pitch = atBat.pitches[k];
         pitches.push(
-          new Pitch(random(-200, 200), random(-200, 200), 0, 20)
+          // new Pitch(random(-200, 200), random(-200, 200), 0, 20)
+          new Pitch(pitches.length*5-200, 0, 0, 5)
         );
       }
     }
