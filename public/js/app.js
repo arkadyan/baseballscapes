@@ -2,11 +2,13 @@
 
 $(function() {
 
-  var pitch = new Pitch();
+  var pitch = new Pitch(20);
 
-  // var gui = new dat.GUI({
-  //     height : 5 * 32 - 1   // nline * 32 - 1
-  // });
+
+  // GUI controls
+  var gui = new dat.GUI();
+  gui.add(pitch, 'size');
+
 
   // Set the scene size
   var WIDTH = window.innerWidth,
