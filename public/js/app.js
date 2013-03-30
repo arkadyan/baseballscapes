@@ -3,20 +3,28 @@
 var scene, renderer, camera;
 
 $(function() {
+  var i, j, k;
 
   var pitches = [];
-  for (var i=0; i < data.length; i++) {
-    var inning = data[i];
-    for (var j=0; j < inning.at_bats.length; j++) {
+  for (i=0; i < data.length; i++) {
+    var inning = data[i],
+        startingX = random(-200, -100),
+        startingY = random(-150, 150);
+    console.log("startingX=" + startingX + ", startingY=" + startingY);
+    for (j=0; j < inning.at_bats.length; j++) {
       var atBat = inning.at_bats[j];
-      for (var k=0; k < atBat.pitches.length; k++) {
-        var pitch = atBat.pitches[k];
+      for (k=0; k < atBat.pitches.length; k++) {
+        var pitch = atBat.pitches[k],
+            pitchSize = 5,
+            gap = 1;
         pitches.push(
-          new Pitch(pitches.length*5-200, 0, 0, 5, pitch.attributes)
+          new Pitch(pitches.length*(pitchSize + gap)-200, 0, 0, pitchSize, pitch.attributes)
+          // new Pitch(pitches.length*(pitchSize + gap)-startingX, startingY, 0, pitchSize, pitch.attributes)
         );
       }
     }
   }
+
 
   // GUI controls
   // var gui = new dat.GUI();
@@ -69,7 +77,7 @@ $(function() {
   pointLight.position.y = 50;
   pointLight.position.z = 130;
 
-  for (var i=0; i < pitches.length; i++) {
+  for (i=0; i < pitches.length; i++) {
     pitches[i].add(scene);
   }
   InningSphere.draw();
