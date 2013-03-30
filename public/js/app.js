@@ -1,17 +1,16 @@
-/*global $, THREE, requestAnimationFrame, dat */
+/*global window, $, THREE, Pitch, requestAnimationFrame, dat */
 
 $(function() {
 
-  var Game = function() {
+  var pitch = new Pitch();
 
-  };
-
-  var game = new Game();
-  var gui = new dat.GUI();
+  // var gui = new dat.GUI({
+  //     height : 5 * 32 - 1   // nline * 32 - 1
+  // });
 
   // Set the scene size
-  var WIDTH = 400,
-      HEIGHT = 300;
+  var WIDTH = window.innerWidth,
+      HEIGHT = window.innerHeight;
 
   // Set some camera attributes
   var VIEW_ANGLE = 45,
@@ -47,31 +46,6 @@ $(function() {
   $container.append(renderer.domElement);
 
 
-  // Create the sphere's material
-  // var sphereMaterial = new THREE.MeshLambertMaterial({
-  var sphereMaterial = new THREE.MeshPhongMaterial({
-    color: 0xCC0000
-  });
-
-  // Set up the sphere vars
-  var radius = 50,
-      segments = 16,
-      rings = 16;
-
-  // Create a new mesh with sphere geometry
-  var sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      radius,
-      segments,
-      rings
-    ),
-    sphereMaterial
-  );
-
-  // Add the sphere to the scene
-  scene.add(sphere);
-
-
   // Create a point light
   var pointLight = new THREE.PointLight(0xFFFFFF);
 
@@ -80,12 +54,18 @@ $(function() {
   pointLight.position.y = 50;
   pointLight.position.z = 130;
 
-  // Add the light to the scene
-  scene.add(pointLight);
+
 
 
   function animate() {
     requestAnimationFrame(animate);
+
+    // Add all elements to the scene
+    pitch.add(scene);
+
+    // Add the light to the scene
+    scene.add(pointLight);
+
     renderer.render(scene, camera);
   }
   animate();
