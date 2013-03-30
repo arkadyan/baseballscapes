@@ -8,8 +8,9 @@ $(function() {
   var pitches = [];
   for (i=0; i < data.length; i++) {
     var inning = data[i],
-        startingX = random(-200, -100),
-        startingY = random(-150, 150);
+        startingX = random(-150, -50),
+        startingY = i * 10 + -50,
+        inningPitchCount = 0;
     console.log("startingX=" + startingX + ", startingY=" + startingY);
     for (j=0; j < inning.at_bats.length; j++) {
       var atBat = inning.at_bats[j];
@@ -17,9 +18,9 @@ $(function() {
         var pitch = atBat.pitches[k],
             pitchSize = 5,
             gap = 1;
+        inningPitchCount++;
         pitches.push(
-          new Pitch(pitches.length*(pitchSize + gap)-200, 0, 0, pitchSize, pitch.attributes)
-          // new Pitch(pitches.length*(pitchSize + gap)-startingX, startingY, 0, pitchSize, pitch.attributes)
+          new Pitch(inningPitchCount*(pitchSize + gap)+startingX, startingY, 0, pitchSize, pitch.attributes)
         );
       }
     }
