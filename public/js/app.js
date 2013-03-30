@@ -33,6 +33,8 @@ $(function() {
     }
   }
 
+  var matchupsGrid = new MatchupsGrid(matchups);
+
 
   // GUI controls
   // var gui = new dat.GUI();
@@ -89,6 +91,7 @@ $(function() {
     pitches[i].add(scene);
   }
   InningSphere.draw();
+  matchupsGrid.add(scene);
 
   // Add the light to the scene
   scene.add(pointLight);
