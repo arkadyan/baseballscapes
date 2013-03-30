@@ -4,6 +4,10 @@ $(function() {
 
   var pitches = [];
 
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
   for (var i=0; i < data.length; i++) {
     var inning = data[i];
     for (var j=0; j < inning.at_bats.length; j++) {
@@ -11,7 +15,7 @@ $(function() {
       for (var k=0; k < atBat.pitches.length; k++) {
         var pitch = atBat.pitches[k];
         pitches.push(
-          new Pitch(20)
+          new Pitch(random(-200, 200), random(-200, 200), 0, 20)
         );
       }
     }
