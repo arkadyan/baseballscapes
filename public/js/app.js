@@ -33,6 +33,8 @@ $(function() {
     }
   }
 
+  var matchupsGrid = new MatchupsGrid(matchups);
+
 
   // GUI controls
   // var gui = new dat.GUI();
@@ -90,6 +92,7 @@ $(function() {
   }
   InningSphere.draw();
   Batting.drawAll();
+  matchupsGrid.add(scene);
 
   // Add the light to the scene
   scene.add(pointLight);
@@ -97,7 +100,7 @@ $(function() {
   $("body").css('background-color', homeTeam.color);
 
   // very sorry
-  setTimeout(function(){renderer.render(scene, camera);}, 200);
+  renderer.render(scene, camera);
 });
 
 
