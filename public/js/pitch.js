@@ -1,13 +1,17 @@
-/*global THREE */
+/*global THREE, scale */
 
-var Pitch = function(_x, _y, _z, _size) {
+var Pitch = function(_x, _y, _z, _size, _data) {
   this.x = _x;
   this.y = _y;
   this.z = _z;
   this.size = _size;
+  this.data = _data;
+
+  var redComponent = scale(70, 100, 0, 1, this.data.end_speed);
 
   this.geometry = new THREE.CubeGeometry(this.size, this.size, this.size);
-  this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+  this.material = new THREE.MeshBasicMaterial();
+  this.material.color.setRGB(redComponent, 0, 0);
 
   this.mesh = new THREE.Mesh(this.geometry, this.material);
 };
