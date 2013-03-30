@@ -20,6 +20,8 @@
   <script type="text/javascript" charset="utf-8">
     var data = <%= @game.innings.to_json %>;
     var boxScore = <%= @game.box_score.to_json %>;
+    var homeTeam = <%= @game.home_team.to_json %>;
+    var awayTeam = <%= @game.away_team.to_json %>;
   </script>
 </head>
 
