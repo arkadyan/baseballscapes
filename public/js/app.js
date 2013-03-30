@@ -82,6 +82,7 @@ $(function() {
     pitches[i].add(scene);
   }
   InningSphere.draw();
+  Batting.drawAll();
 
   // Add the light to the scene
   scene.add(pointLight);

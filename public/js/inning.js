@@ -85,3 +85,82 @@ var Sparkle = {
   }
 };
 
+//
+// ab: "31"
+// avg: ".262"
+// batter: Array[16]
+// bb: "5"
+// d: "2"
+// da: "14"
+// h: "8"
+// hr: "2"
+// lob: "15"
+// note: "↵         <pinch_hitters>a-Intentionally walked for Jones, An in the 8th. b-Grounded into a forceout for Nix, J in the 8th. </pinch_hitters>↵         <pinch_runners>1-Ran for Swisher in the 8th. </pinch_runners>"
+// po: "27"
+// r: "6"
+// rbi: "6"
+// so: "7"
+// t: "1"
+
+
+// Using wireframe materials to illustrate shape details.
+var wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
+
+var Batting = {
+  drawAll: function() {
+    $.each(boxScore.batting, function(i, team) {
+      $.each(['hr', 'bb', 'h', 'r', 'rbi', 'so'], function(i, thing) {
+        Batting[thing](team[thing], team['team_flag']);
+      });
+    });
+  },
+  hr: function(count, team){
+    var m = (team == 'home') ? -1 : 1;
+
+
+    for (var i=0; i < count; i++) {
+      Sparkle.draw((m*WIDTH)/count,0,-300, count*(count), 0.5 + (0.5*m));
+    }
+  },
+
+  bb: function(count, team){
+    console.log("bb count" + " : " + count + " : " + team);
+
+  },
+  h: function(count, team){
+
+  },
+  r: function(count, team){
+    var dir = (team == 'home' ? 1 : -1);
+    var darkMaterial, wireframeMaterial;
+    if(team == 'home') {
+      darkMaterial = new THREE.MeshBasicMaterial( { color: 0xCCCCCC } );
+      wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: true, transparent: true } );
+    } else {
+      darkMaterial = new THREE.MeshBasicMaterial( { color: 0x333333 } );
+      wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0xCCCCCC, wireframe: true, transparent: true } );
+    }
+
+    console.log("r count" + " : " + count + " : " + team);
+    for (var i=0; i < count; i++) {
+      console.log('draw a r');
+      var shape = THREE.SceneUtils.createMultiMaterialObject(
+      	// radiusAtTop, radiusAtBottom, height, segmentsAroundRadius, segmentsAlongHeight,
+          new THREE.CylinderGeometry( 0, 20*(i+1), 30, 20, count*count ),
+          [darkMaterial, wireframeMaterial] );
+          // var x = 10;
+          shape.position.set(rand(WIDTH*0.7)-WIDTH/2, (HEIGHT/-5), -50);
+          shape.rotation.x += 1.57;
+          scene.add( shape );
+    };
+  },
+  rbi: function(count, team){
+
+  },
+  so: function(count, team){
+    console.log("so count" + " : " + count + " : " + team);
+
+  }
+};
+
+
