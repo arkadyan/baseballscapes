@@ -7,6 +7,10 @@ get '/' do
   erb :index
 end
 
+get '/demo' do
+  erb :demo
+end
+
 get '/game/:date/:team' do
   @game = MLBGameData.new(params[:date], params[:team])
   erb :index

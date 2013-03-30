@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>Baseballscapes</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" type="text/css" charset="utf-8">
+</head>
+
+<body id="index">
+
+  <div id="container">
+    <% ok_ones = [
+      '2012-06-20/nya',
+      '2012-05-20/bos',
+      '2012-05-20/tex',
+      '2012-07-13/cle'
+    ] %>
+    <ul style='margin-top: 8em'>
+      <% ok_ones.each do |one| %>
+      <li style='list-style: none; padding: 0 0 1em 4em; font-size: 2em; font-family: courier'>
+        <a style='color: #999; text-decoration: none' href='/game/<%= one %>'><%= one %></a></li>
+      <% end %>
+    </ul>
+  </div>
+  </body>
+</html>
