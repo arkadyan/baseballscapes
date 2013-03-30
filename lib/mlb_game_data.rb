@@ -2,9 +2,7 @@ require 'date'
 require 'open-uri'
 require 'nokogiri'
 require 'pry'
-
-
-
+require "active_support/core_ext"
 
 class MLBGameData
   BASE_URL = 'http://gd2.mlb.com/components/game/mlb'
@@ -56,7 +54,7 @@ class MLBGameData
   # /inning/inning_all.xml - a large file containing every pitch, etc
 
   def data file = 'inning/inning_all.xml'
-    prefetched_data(file) || fetch_file(file)
+    @_data ||= (prefetched_data(file) || fetch_file(file))
   end
 
   def fetch_file file
@@ -88,6 +86,18 @@ class MLBGameData
     nil
   end
 
+  def innings
+    @_innings ||= data.search('inning').map{|i| Inning.new(i)}
+  end
+
+  def at_bats
+    innings.map(&:at_bats).flatten
+  end
+
+  def pitches
+    at_bats.map(&:pitches).flatten
+  end
+
   def compute_url
     raise ArgumentError unless TEAMS.keys.include? team.to_sym
     dir_url = [
@@ -100,4 +110,56 @@ class MLBGameData
     return [dir_url,game]*'/'
   end
 
+  class Node
+    attr_reader :doc, :attributes, :children
+    def initialize doc
+      @children =[]
+      @doc = doc
+      @attributes = {}
+      populate_attributes
+      transform if respond_to?(:transform)
+    end
+
+    def populate_attributes
+      @doc.attributes.each do |k,v|
+        attributes[k.to_sym] = v.value
+      end
+    end
+
+    def to_json
+      out = attributes
+      children.each do |ch|
+        out[ch.to_sym] = send(ch).map(&:to_json)
+      end
+      out.to_json
+    end
+
+    def method_missing attribute
+      attributes[attribute.to_sym] || super
+    end
+  end
+
+  class Inning < Node
+    attr_reader :at_bats
+    def transform
+      @children << :at_bats
+      @at_bats = doc.search('atbat').map{|ab| AtBat.new ab}
+    end
+  end
+
+  class AtBat < Node
+    attr_reader :pitches
+    def transform
+      @children << :pitches
+      @pitches = doc.search('pitch').map{|p| Pitch.new p}
+    end
+  end
+
+  class Pitch < Node
+  end
 end
+
+# params = {:date => '2012-07-13', :team => 'lan'}
+# d = MLBGameData.new(params[:date], params[:team])
+# a = d.at_bats.last
+# binding.pry
