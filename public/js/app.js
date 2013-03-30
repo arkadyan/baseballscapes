@@ -86,3 +86,8 @@ function rand(max) {
   return Math.random()*max;
 }
 
+function random(a, b) {
+  var min = Math.min(a, b),
+      max = Math.max(a, b);
+  return Math.random() * (max - min) + min;
+}
