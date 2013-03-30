@@ -21,9 +21,7 @@ Pitch.prototype._draw = function() {
   this.geometry.height = this.size;
   this.geometry.depth = this.size;
 
-  this.mesh.position.x = this.x;
-  this.mesh.position.y = this.y;
-  this.mesh.position.z = this.z;
+  this.mesh.position.set(this.x, this.y, this.z);
 
   // this.mesh.rotation.x += 0.01;
   // this.mesh.rotation.y += 0.02;
