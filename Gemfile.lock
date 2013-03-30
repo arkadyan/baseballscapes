@@ -28,6 +28,7 @@ GEM
     mime-types (1.21)
     multi_json (1.7.2)
     netrc (0.7.7)
+    nokogiri (1.5.9)
     pry (0.9.12)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -53,6 +54,7 @@ DEPENDENCIES
   activesupport
   compass
   heroku
+  nokogiri
   pry
   rack
   sinatra
