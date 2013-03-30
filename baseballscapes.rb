@@ -3,6 +3,7 @@ require 'sinatra'
 require './lib/mlb_game_data'
 
 get '/' do
+  @game = MLBGameData.new('2012-07-13', 'lan')
   erb :index
 end
 
