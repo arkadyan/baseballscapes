@@ -1,7 +1,6 @@
 require 'date'
 require 'open-uri'
 require 'nokogiri'
-require 'pry'
 require "active_support/core_ext"
 
 class MLBGameData
