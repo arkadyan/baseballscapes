@@ -8,21 +8,35 @@ var InningSphere = {
 
     var i_width = WIDTH*4;
     var i_height = HEIGHT*4;
-    for (var i=0; i < 30; i++) {
-      $.each([awayTeam.color, homeTeam.color],function(i, color) {
-        var darkMaterial = new THREE.MeshPhongMaterial( { color: color, ambient: 0xff0000, transparent: true, blending: THREE.AdditiveBlending } );
-        var sphere = new THREE.Mesh( sphereGeom.clone(), darkMaterial );
-        sphere.position.set(rand(i_width)-(i_width/2), rand(i_height)-(i_height/2), -500-rand(2000));
-        scene.add( sphere );
 
-
-        var darkMaterial = new THREE.MeshPhongMaterial( { color: color, ambient: 0xff0000, transparent: true, blending: THREE.AdditiveBlending } );
-        var sphere = new THREE.Mesh( biggerSphereGeom.clone(), darkMaterial );
-        sphere.position.set(rand(i_width)-(i_width/2), rand(i_height)-(i_height/2), -2500-rand(100));
-        scene.add( sphere );
-
-      });
+    var totalRuns = parseFloat(boxScore.batting[0].r)+parseFloat(boxScore.batting[1].r);
+    var homeTeamData = {
+      color: homeTeam.color,
+      spheres: 60.0/(totalRuns) * parseFloat(boxScore.batting[0].r)
+      // divisor: totalRuns/parseFloat(boxScore.batting[0].r)+
     };
+    var awayTeamData = {
+      color: homeTeam.color,
+      spheres: 60.0/(totalRuns) * parseFloat(boxScore.batting[0].r)
+    };
+    console.log("eee" + " : " + homeTeamData.spheres + " : " + awayTeamData.spheres);
+
+    $.each([homeTeamData, awayTeamData], function(i, data) {
+      for (var i=0; i < data.spheres; i++) {
+        $.each([awayTeam.color, homeTeam.color],function(i, color) {
+          var darkMaterial = new THREE.MeshPhongMaterial( { color: color, ambient: 0xff0000, transparent: true, blending: THREE.NormalBlending } );
+          var sphere = new THREE.Mesh( biggerSphereGeom.clone(), darkMaterial );
+          sphere.position.set(rand(i_width)-(i_width/2), rand(i_height)-(i_height/2), -2500-rand(100));
+          scene.add( sphere );
+
+          var darkMaterial = new THREE.MeshPhongMaterial( { color: color, ambient: 0xff0000, transparent: true, blending: THREE.AdditiveBlending } );
+          var sphere = new THREE.Mesh( sphereGeom.clone(), darkMaterial );
+          sphere.position.set(rand(i_width)-(i_width/2), rand(i_height)-(i_height/2), -500-rand(2000));
+          scene.add( sphere );
+        });
+      }
+    });
+
   }
 }
 
@@ -119,7 +133,10 @@ var Batting = {
 
 
     for (var i=0; i < count; i++) {
-      Sparkle.draw((m*WIDTH)/count,0,-300, count*(count), 0.5 + (0.5*m));
+      var w = (WIDTH/count);
+      if( Math.abs(w) > WIDTH/2) {w = WIDTH/2 - 100}
+      console.log('draw a hr' + " : " + w);
+      Sparkle.draw(m*w,0,-300, count*(count), 0.5 + (0.5*m));
     }
   },
 
@@ -149,7 +166,7 @@ var Batting = {
           new THREE.CylinderGeometry( 0, 20*(i+1), 30, 20, count*count ),
           [darkMaterial, wireframeMaterial] );
           // var x = 10;
-          shape.position.set(rand(WIDTH*0.7)-WIDTH/2, (HEIGHT/-5), -50);
+          shape.position.set(rand(WIDTH*0.7)-WIDTH/2, (HEIGHT/rand(10)), -50);
           shape.rotation.x += 1.57;
           scene.add( shape );
     };
