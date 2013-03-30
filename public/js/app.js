@@ -86,6 +86,7 @@ $(function() {
   // Add the light to the scene
   scene.add(pointLight);
 
+  $("body").css('background-color', homeTeam.color);
 
   // very sorry
   setTimeout(function(){renderer.render(scene, camera);}, 200);
