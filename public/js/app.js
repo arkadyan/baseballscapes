@@ -86,7 +86,9 @@ $(function() {
   // Add the light to the scene
   scene.add(pointLight);
 
-  renderer.render(scene, camera);
+
+  // very sorry
+  setTimeout(function(){renderer.render(scene, camera);}, 200);
 });
 
 
