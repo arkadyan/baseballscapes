@@ -60,10 +60,10 @@ class MLBGameData
   end
 
   def fetch_file file
+    puts "--- fetching remote #{compute_url+file}"
     remote_data = open(compute_url + file).read
     file_path = compute_url.split('/').last + file.gsub('/', '-')
 
-    puts "--- fetching remote #{compute_url+file}"
 
     open(File.join(CACHE_PATH)+'/'+file_path, 'wb') do |file|
         begin
@@ -84,7 +84,7 @@ class MLBGameData
         return Nokogiri::XML(open([File.join(CACHE_PATH), f].join('/')))
       end
     end
-    puts "--- cache miss "
+    puts "--- cache miss #{date} / #{team} / #{file}"
     nil
   end
 
@@ -101,10 +101,3 @@ class MLBGameData
   end
 
 end
-
-date = '2012-07-13'
-
-m = MLBGameData.new('2012-07-13', 'bos')
-
-a = m.data
-binding.pry
