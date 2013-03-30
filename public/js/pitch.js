@@ -10,7 +10,7 @@ var Pitch = function(_x, _y, _z, _size, _data) {
   var redComponent = scale(70, 100, 0, 1, this.data.end_speed);
 
   this.geometry = new THREE.CubeGeometry(this.size, this.size, this.size);
-  this.material = new THREE.MeshBasicMaterial();
+  this.material = new THREE.MeshLambertMaterial();
   this.material.color.setRGB(redComponent, 0, 0);
 
   this.mesh = new THREE.Mesh(this.geometry, this.material);
