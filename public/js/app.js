@@ -1,6 +1,13 @@
-/*global $, THREE, requestAnimationFrame */
+/*global $, THREE, requestAnimationFrame, dat */
 
 $(function() {
+
+  var Game = function() {
+
+  };
+
+  var game = new Game();
+  var gui = new dat.GUI();
 
   // Set the scene size
   var WIDTH = 400,
