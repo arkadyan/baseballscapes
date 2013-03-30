@@ -5,15 +5,22 @@ var scene, renderer, camera, WIDTH, HEIGHT;
 $(function() {
   var i, j, k;
 
-  var pitches = [];
+  var pitches = [],
+      matchups = [];
+
   for (i=0; i < data.length; i++) {
     var inning = data[i],
         startingX = random(-150, -50),
         startingY = i * 10 + -50,
         inningPitchCount = 0;
-    console.log("startingX=" + startingX + ", startingY=" + startingY);
     for (j=0; j < inning.at_bats.length; j++) {
       var atBat = inning.at_bats[j];
+
+      matchups.push({
+        pitcher: atBat.attributes.p_throws,
+        batter: atBat.attributes.stand
+      });
+
       for (k=0; k < atBat.pitches.length; k++) {
         var pitch = atBat.pitches[k],
             pitchSize = 5,
@@ -26,6 +33,7 @@ $(function() {
     }
   }
 
+  var matchupsGrid = new MatchupsGrid(matchups);
 
   // GUI controls
   // var gui = new dat.GUI();
@@ -83,8 +91,8 @@ $(function() {
   }
   InningSphere.draw();
   Batting.drawAll();
+  matchupsGrid.add(scene);
 
-  // Add the light to the scene
   scene.add(pointLight);
 
   $("body").css('background-color', homeTeam.color);
