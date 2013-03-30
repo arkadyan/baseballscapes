@@ -1,5 +1,6 @@
+require 'compass'
 require 'sinatra'
 
-get '/hi' do
-  "Hello World!"
+get '/' do
+  "Baseballscapes!"
 end
