@@ -14,8 +14,8 @@ Pitch.prototype._draw = function() {
   this.geometry.height = this.size;
   this.geometry.depth = this.size;
 
-  this.mesh.rotation.x += 0.01;
-  this.mesh.rotation.y += 0.02;
+  // this.mesh.rotation.x += 0.01;
+  // this.mesh.rotation.y += 0.02;
 };
 
 Pitch.prototype.add = function(scene) {

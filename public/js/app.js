@@ -1,13 +1,25 @@
-/*global window, $, THREE, Pitch, requestAnimationFrame, dat */
+/*global window, $, THREE, data, Pitch, requestAnimationFrame, dat */
 
 $(function() {
 
-  var pitch = new Pitch(20);
+  var pitches = [];
 
+  for (var i=0; i < data.length; i++) {
+    var inning = data[i];
+    for (var j=0; j < inning.at_bats.length; j++) {
+      var atBat = inning.at_bats[j];
+      for (var k=0; k < atBat.pitches.length; k++) {
+        var pitch = atBat.pitches[k];
+        pitches.push(
+          new Pitch(20)
+        );
+      }
+    }
+  }
 
   // GUI controls
-  var gui = new dat.GUI();
-  gui.add(pitch, 'size', 5, 100);
+  // var gui = new dat.GUI();
+  // gui.add(pitch, 'size', 5, 100);
 
 
   // Set the scene size
@@ -63,7 +75,9 @@ $(function() {
     requestAnimationFrame(animate);
 
     // Add all elements to the scene
-    pitch.add(scene);
+    for (var i=0; i < pitches.length; i++) {
+      pitches[i].add(scene);
+    }
 
     // Add the light to the scene
     scene.add(pointLight);
