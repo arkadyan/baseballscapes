@@ -1,5 +1,7 @@
 /*global window, $, THREE, data, Pitch, requestAnimationFrame, dat */
 
+var scene, renderer, camera;
+
 $(function() {
 
   var pitches = [];
@@ -35,15 +37,15 @@ $(function() {
   var $container = $('#container');
 
   // Create a WebGL renderer, camera and a scene
-  var renderer = new THREE.WebGLRenderer();
-  var camera = new THREE.PerspectiveCamera(
+  renderer = new THREE.WebGLRenderer();
+  camera = new THREE.PerspectiveCamera(
                       VIEW_ANGLE,
                       ASPECT,
                       NEAR,
                       FAR
                    );
 
-  var scene = new THREE.Scene();
+  scene = new THREE.Scene();
 
 
   // Add a camera to the scene
